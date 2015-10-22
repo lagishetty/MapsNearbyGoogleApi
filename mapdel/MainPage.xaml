@@ -1,0 +1,34 @@
+﻿<Page
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="using:mapdel"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:Maps="using:Windows.UI.Xaml.Controls.Maps"
+    x:Class="mapdel.MainPage"
+    mc:Ignorable="d"
+    Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
+
+    <Grid>
+
+        <Maps:MapControl x:Name="map1" MapServiceToken=""   HorizontalAlignment="Left" Margin="26,57,0,0" VerticalAlignment="Top" Height="306" Width="347">
+
+            <Maps:MapItemsControl  x:Name="mapitem">
+
+                <Maps:MapItemsControl.ItemTemplate>
+                    <DataTemplate>
+                        <TextBox Maps:MapControl.Location="{Binding }"></TextBox>
+                    </DataTemplate>
+
+                </Maps:MapItemsControl.ItemTemplate>
+            </Maps:MapItemsControl>
+
+        </Maps:MapControl>
+
+        <Button Content="Button" HorizontalAlignment="Left" Margin="60,420,0,0" VerticalAlignment="Top" Click="Button_Click" Height="50" Width="67"/>
+        <ListView Name="lv1" Margin="265,389,27,172"></ListView>
+        <TextBlock x:Name="tb1" HorizontalAlignment="Left" Margin="230,576,0,0" TextWrapping="Wrap" Text="TextBlock" VerticalAlignment="Top" FontSize="20" Visibility="Collapsed"/>
+
+
+    </Grid>
+</Page>
