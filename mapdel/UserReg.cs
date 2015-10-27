@@ -18,5 +18,7 @@ namespace mapdel
        
         [ForeignKey(typeof(Login))]  // Specify the foreign key
         public int LoginId { get; set; }
+         [ForeignKey(typeof(Company))]
+        public int UserResID { get; set; }
     }
 }

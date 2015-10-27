@@ -40,6 +40,7 @@ namespace mapdel
             var dbpath = ApplicationData.Current.LocalFolder.Path + "/mydb.db";
             var con = new SQLiteAsyncConnection(dbpath);
             await con.CreateTableAsync<UserReg>();
+            await con.CreateTableAsync<Response>();
         }
         private async void Button_Click(object sender, RoutedEventArgs e)
         {
@@ -48,7 +49,7 @@ namespace mapdel
             await con.CreateTableAsync<UserReg>();
             await con.CreateTableAsync<LoginCheck>();
             UserReg m = new UserReg();
-
+            Response rs = new Response();
             LoginCheck lk = new LoginCheck();
             lk.LoginName = text_reg.Text;
             lk.Password = text_password.Password;
@@ -71,6 +72,7 @@ namespace mapdel
             m.State = ((ComboBoxItem)combo_box.SelectedItem).Content.ToString();
             await con.InsertAsync(lk);
             m.LoginId = lk.LoginId;
+           // m.UserResID = rs.UserResID;
 
             await con.InsertAsync(m);
 
@@ -134,13 +136,18 @@ namespace mapdel
             lk.Password = fuel_password.Password;
             lk.IsCompany = true;
             f.CompanyName = company_name.Text;
-            f.CompanyAddress = company_address.Text;
+          //  f.CompanyAddress = company_address.Text;
             await con.InsertAsync(lk);
             f.LoginId = lk.LoginId;
             await con.InsertAsync(f);
 
             MessageDialog md = new MessageDialog("Success");
             await md.ShowAsync();
+        }
+
+        private void Company_button_Click(object sender, RoutedEventArgs e)
+        {
+            this.Frame.Navigate(typeof(RegisterCompany));
         }
     }
 }

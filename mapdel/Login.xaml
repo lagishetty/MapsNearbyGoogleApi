@@ -17,6 +17,7 @@
                     <TextBlock HorizontalAlignment="Left" Margin="52,134,0,0" TextWrapping="Wrap" Text="Password" VerticalAlignment="Top" FontSize="22"/>
                     <PasswordBox Name="text_pass" Margin="174,126,16,0" Height="28" Password="" PlaceholderText="Enter password"></PasswordBox>
                     <Button Content="Login" HorizontalAlignment="Left" Margin="123,214,0,0" VerticalAlignment="Top" Click="Button_Click_1"/>
+                    <Button x:Name="Company_button" Content="Company Registration" HorizontalAlignment="Left" Margin="123,313,0,0" VerticalAlignment="Top" Height="23" Width="221" Background="#FFF12D2D" Click="Company_button_Click"/>
                 </Grid>
             </PivotItem>
 
@@ -53,10 +54,10 @@
                     <TextBlock HorizontalAlignment="Left" Margin="60,164,0,0" TextWrapping="Wrap" Text="Company Name" VerticalAlignment="Top" FontSize="22" Height="53" Width="105"/>
                     <TextBox x:Name="company_name" HorizontalAlignment="Left" Margin="189,164,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="160"/>
                     <TextBlock HorizontalAlignment="Left" Margin="60,229,0,0" TextWrapping="Wrap" Text="Address" VerticalAlignment="Top" FontSize="22" Height="53" Width="105"/>
-                    <TextBox x:Name="company_address" HorizontalAlignment="Left" Margin="189,229,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="160" Height="75"/>
 
 
-                    <Button x:Name="Fuel_button" Content="Submit" HorizontalAlignment="Left" Margin="131,328,0,0" VerticalAlignment="Top" Click="Fuel_button_Click"/>
+
+                    <Button x:Name="Fuel_button" Content="Submit" HorizontalAlignment="Left" Margin="126,460,0,0" VerticalAlignment="Top" Click="Fuel_button_Click"/>
 
                 </Grid>
             </PivotItem>

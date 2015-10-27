@@ -42,40 +42,54 @@ namespace mapdel
         /// <param name="e">Event data that describes how this page was reached.
         /// This parameter is typically used to configure the page.</param>
         /// 
+        public dynamic srt;
+
         public dynamic ite;
+        public dynamic myuserid;
         protected async override void OnNavigatedTo(NavigationEventArgs e)
         {
 
             var dbpath = ApplicationData.Current.LocalFolder.Path + "/mydb.db";
             var con = new SQLiteAsyncConnection(dbpath);
             await con.CreateTableAsync<Response>();
-
-            var srt = e.Parameter as object;
+            await con.CreateTableAsync<Request>();
+            await con.CreateTableAsync<FuelReg>();
+            srt = e.Parameter as object;
             
-            string querys = string.Format("select * from FuelReg where LoginID='{0}'", srt);
-            List<FuelReg> mylists = await con.QueryAsync<FuelReg>(querys);
+            string querys = string.Format("select * from UserReg where LoginID='{0}'", srt);
+            List<UserReg> mylists = await con.QueryAsync<UserReg>(querys);
 
             if (mylists.Count == 1)
             {
                 var sp = mylists[0];
-                string querys1 = string.Format("select * from Response where CompanyId={0}", sp.FuelId);
+                myuserid = sp.UserID;
+                string querys1 = string.Format("select * from Response where UserResponseID={0}", sp.UserID); //where CId={0}", stp.FuelId);
                 List<Response> mylist1 = await con.QueryAsync<Response>(querys1);
-                var pit = mylist1[0];
+                if (mylist1.Count == 1)
+                {
+                    var pit = mylist1[0];
 
-                tb1.Text = pit.res;
+                    tb1.Text = pit.res;
+                }
             }
 
 
-            
+            //string query = string.Format("select * from FuelReg where FuelID='{0}'",srt);
+            //List<FuelReg> mylist = await con.QueryAsync<FuelReg>(query);
+            //if(mylist.Count==1)
+            //{
+            //    var stp = mylist[0];
+            //    string querys1 = string.Format("select * from Response where UserResponseID={0}",stp); //where CId={0}", stp.FuelId);
+            //    List<Response> mylist1 = await con.QueryAsync<Response>(querys1);
+            //    if(mylist1.Count==1)
+            //    {
+            //        var pit = mylist1[0];
 
-            string query = string.Format("select FuelID from FuelReg where FuelID='{0}'",srt);
-            List<FuelReg> mylist = await con.QueryAsync<FuelReg>(query);
-            if(mylist.Count==1)
-            {
-                var stp = mylist[0];
-
-                ite = stp.FuelId;
-            }
+            //        tb1.Text = pit.res;
+            //    }
+                
+             // ite = stp.LoginId;
+           // }
             
 
 
@@ -93,23 +107,23 @@ namespace mapdel
             
           map1.MapServiceToken = "AutVzTJ62c1kL9L5ni3TBhm5nr1wGSSxL04Zrsw6DTTUeoTT7VqS1Vup4vFmSYaL";
 
-       
-            BasicGeoposition queryHint = new BasicGeoposition();
-            
-            queryHint.Latitude = 17.4271;
-            queryHint.Longitude = 078.4466;
-            Geopoint hwPoint1 = new Geopoint(queryHint);
 
+          Geolocator gl = new Geolocator();
+          Geoposition gp = await gl.GetGeopositionAsync();
+            
+            BasicGeoposition queryHint = new BasicGeoposition();
+
+            queryHint.Latitude = gp.Coordinate.Latitude;
+            queryHint.Longitude = gp.Coordinate.Longitude;
+            Geopoint hwPoint1 = new Geopoint(queryHint);
             MapIcon mi = new MapIcon();
             map1.MapElements.Add(mi);
             map1.Center = hwPoint1;
-            mi.Location = hwPoint1;
             map1.ZoomLevel = 15;
-            map1.LandmarksVisible = true;
-            await map1.TrySetViewAsync(hwPoint1, 16);
-         
-            Uri geocodeRequest = new Uri(string.Format("https://maps.googleapis.com/maps/api/place/nearbysearch/json?location=17.4271,078.4466&radius=500&types=petrol_bunk&key=AIzaSyCguNRWmAkk_Vctf0bePWiY1rIjM399Loo"));
 
+
+            Uri geocodeRequest = new Uri(string.Format("https://maps.googleapis.com/maps/api/place/nearbysearch/json?location={0},{1}&radius=1500&type=gas_station&key=AIzaSyBgBxFhipo5V0H2TL3fB9vc6KyvclffFXI",hwPoint1.Position.Latitude,hwPoint1.Position.Longitude)); // 17.4271,078.4466     AIzaSyCguNRWmAkk_Vctf0bePWiY1rIjM399Loo
+          
             HttpClient client = new HttpClient();
             
             HttpResponseMessage response = await client.GetAsync(geocodeRequest);
@@ -117,12 +131,6 @@ namespace mapdel
             {
                 var data = response.Content.ReadAsStringAsync();
                 var listdata = JsonConvert.DeserializeObject<mapdel.Class1.RootObject>(data.Result);
-                var item = JsonConvert.DeserializeObject<mapdel.Class1.Location>(data.Result);
-                var itemmm = listdata.results;
-                lv1.ItemsSource = listdata.results;
-                lv1.DisplayMemberPath = "name";
-
-                int i = 0;
          
                 foreach(var dataob in listdata.results)
                 {
@@ -130,24 +138,47 @@ namespace mapdel
                     var loct = items.location;
 
                     var sst=dataob.name;
+
+                    var bzp = dataob.vicinity;
                     
                     BasicGeoposition bgp = new BasicGeoposition();
 
                     AppBarButton rd = new AppBarButton();
+                    rd.Foreground = new SolidColorBrush(Colors.Black);
+
+                    TextBox tbx = new TextBox();
+                    tbx.Text = dataob.name;
+                    tbx.FontSize = 12;
+
+
                     StackPanel st = new StackPanel();
+                    st.Background = new SolidColorBrush(Colors.Black);
+                    Uri stq = new Uri(dataob.icon);
+
+                    BitmapIcon bmi = new BitmapIcon();
+                    bmi.UriSource = stq;
+                    bmi.Height = 20;
+                    bmi.Width = 20;
 
                     bgp.Latitude = loct.lat;
                     bgp.Longitude = loct.lng;
                     Geopoint hwPoint = new Geopoint(bgp);
 
+                    MapControl.SetLocation(tbx, hwPoint);
                     MapControl.SetLocation(rd, hwPoint);
+                    MapControl.SetLocation(bmi, hwPoint);
+
+                    MapControl.SetNormalizedAnchorPoint(tbx, new Point(0.5, 0.5));
                     MapControl.SetNormalizedAnchorPoint(rd, new Point(0.5, 0.5));
-                    
+                    MapControl.SetNormalizedAnchorPoint(bmi, new Point(0.5, 0.5));
+
+                    map1.Children.Add(tbx);
                     map1.Children.Add(rd);
+                    map1.Children.Add(bmi);
                     
                    
 
-                    rd.Click += (s, args) => rd_Click(s, args, hwPoint,sst);
+                    rd.Click += (s, args) => rd_Click(s, args, hwPoint,sst,bzp);
                    
                     
                 }
@@ -158,47 +189,61 @@ namespace mapdel
 
 
 
-        void rd_Click(object sender, RoutedEventArgs e,Geopoint g,string bunkname)
+        void rd_Click(object sender, RoutedEventArgs e,Geopoint g,string bunkname,string address)
         {
-            var dbpath = ApplicationData.Current.LocalFolder.Path + "/mydb.db";
-            var con = new SQLiteAsyncConnection(dbpath);
+            List<object> str = new List<object>();
+            str.Add(g);
+            str.Add(bunkname);
+            str.Add(address);
+            str.Add(ite);
+            str.Add(myuserid);
+            
+            this.Frame.Navigate(typeof(Bottles),str);
 
 
-            StackPanel st = new StackPanel();
-            RadioButton rb = new RadioButton();
 
+            //StackPanel st = new StackPanel();
+            //st.Background = new SolidColorBrush(Colors.BlueViolet);
+            //st.MaxHeight = 100;
+            //st.MaxWidth = 40;
+            //RadioButton rb = new RadioButton();
+           
         
-            RadioButton rb1 = new RadioButton();
+            //RadioButton rb1 = new RadioButton();
 
-            st.Children.Add(rb);
-            st.Children.Add(rb1);
+            //st.Children.Add(rb);
+            //st.Children.Add(rb1);
             
 
-            MapControl.SetLocation(st, g);
-            map1.Children.Add(st);
+            //MapControl.SetLocation(st, g);
+            //map1.Children.Add(st);
 
-            int va;
-            if(rb.IsChecked==true)
-            {
-                va = 3;
-            }
-            else
-            {
-                va = 4;
-            }
-            Request rq = new Request();
+            //int va;
+            //if(rb.IsChecked==true)
+            //{
+            //    va = 3;
+            //}
+            //else
+            //{
+            //    va = 4;
+            //}
+            //Request rq = new Request();
 
-            rq.CompanyId = ite;
-            rq.value = va;
-            rq.uID = ite;
-            con.InsertAsync(rq);
+            //rq.CompanyId = ite;
+            //rq.value = va;
+            //rq.uname = bunkname;
+            //con.InsertAsync(rq);
 
 
 
             
         }
 
-       
+        private void AppBarButton_Click(object sender, RoutedEventArgs e)
+        {
+            this.Frame.Navigate(typeof(Login));
+        }
+
 
     }
 }

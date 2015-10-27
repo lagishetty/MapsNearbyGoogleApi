@@ -11,23 +11,12 @@
 
     <Grid>
 
-        <Maps:MapControl x:Name="map1" MapServiceToken=""   HorizontalAlignment="Left" Margin="26,57,0,0" VerticalAlignment="Top" Height="306" Width="347">
+        <Maps:MapControl x:Name="map1" MapServiceToken=""   HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top" Height="447" Width="332"/>
 
-            <Maps:MapItemsControl  x:Name="mapitem">
-
-                <Maps:MapItemsControl.ItemTemplate>
-                    <DataTemplate>
-                        <TextBox Maps:MapControl.Location="{Binding }"></TextBox>
-                    </DataTemplate>
-
-                </Maps:MapItemsControl.ItemTemplate>
-            </Maps:MapItemsControl>
-
-        </Maps:MapControl>
-
-        <Button Content="Button" HorizontalAlignment="Left" Margin="60,420,0,0" VerticalAlignment="Top" Click="Button_Click" Height="50" Width="67"/>
-        <ListView Name="lv1" Margin="265,389,27,172"></ListView>
-        <TextBlock x:Name="tb1" HorizontalAlignment="Left" Margin="230,576,0,0" TextWrapping="Wrap" Text="TextBlock" VerticalAlignment="Top" FontSize="20" Visibility="Collapsed"/>
+        <Button Content="Get Nearby Petrol bunks" HorizontalAlignment="Left" Margin="10,452,0,0" VerticalAlignment="Top" Click="Button_Click" Height="50" Width="332"/>
+        <TextBlock x:Name="tb1" HorizontalAlignment="Left" Margin="64,558,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" FontSize="16"/>
+        <Slider x:Name="slider1"  Margin="347,10,10,419" Value="{Binding ZoomLevel, ElementName=map1, Mode=TwoWay}" Orientation="Vertical" Background="#FF919191" Foreground="#FFACAFB4" SmallChange="1" Minimum="5" Maximum="20" LargeChange="2"/>
+        <AppBarButton HorizontalAlignment="Left" Icon="Accept" Label="Logout" Margin="315,546,0,0" VerticalAlignment="Top" Click="AppBarButton_Click"/>
 
 
     </Grid>
