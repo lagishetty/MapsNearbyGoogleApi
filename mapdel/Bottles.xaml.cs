@@ -39,6 +39,7 @@ namespace mapdel
         public dynamic srr;
         public dynamic geo;
         public dynamic myuser;
+        public dynamic myuname;
         protected async override void OnNavigatedTo(NavigationEventArgs e)
         {
             var dbpath = ApplicationData.Current.LocalFolder.Path + "/mydb.db";
@@ -52,6 +53,7 @@ namespace mapdel
 
             srr = str1[3];
             myuser = str1[4];
+            myuname = str1[5];
 
 
 
@@ -89,22 +91,20 @@ namespace mapdel
                 var pos = mylist[0];
 
                 Request rq = new Request();
-                rq.uname = pos.CompanyName;
+                rq.uname = myuname;
                 rq.value = va;
                 rq.CompanyId = pos.FuelId;
                 rq.userresid = myuser;
- 
-                //FuelReg fr = new FuelReg();
-                //fr.myval = va;
-
 
                 await con.InsertAsync(rq);
                 var msd = new MessageDialog("Requested fuel :" + va).ShowAsync();
             }
-        }
 
+        }
+        Windows.Storage.ApplicationDataContainer data = Windows.Storage.ApplicationData.Current.LocalSettings;
         private void AppBarButton_Click(object sender, RoutedEventArgs e)
         {
+           
             this.Frame.Navigate(typeof(Login));
         }
     }

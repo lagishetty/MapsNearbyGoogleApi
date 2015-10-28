@@ -12,10 +12,11 @@
         <TextBlock x:Name="tb1" HorizontalAlignment="Left" Margin="52,149,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Height="38" Width="149" FontSize="16"/>
         <TextBlock x:Name="respon" HorizontalAlignment="Left" Margin="235,205,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Height="26" Width="109"/>
         <Button Content="Response" HorizontalAlignment="Left" Margin="235,139,0,0" VerticalAlignment="Top" Click="Button_Click"/>
-        <ListView HorizontalAlignment="Left" Name="lv1"  Height="199" Margin="85,320,0,0" VerticalAlignment="Top" Width="220"/>
+        <ListView HorizontalAlignment="Left" Name="lv1" ItemsSource="{Binding value}"  Height="203" Margin="52,299,0,0" VerticalAlignment="Top" Width="116"/>
         <TextBlock x:Name="tbname" HorizontalAlignment="Left" Margin="52,39,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Height="48" Width="292" FontSize="20"/>
         <TextBlock HorizontalAlignment="Left" Margin="52,92,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Height="31" Width="292" FontSize="16"/>
         <AppBarButton HorizontalAlignment="Left" Icon="Accept" Label="Logout" Margin="315,511,0,0" VerticalAlignment="Top" Click="AppBarButton_Click"/>
+        <ListView x:Name="lv2" HorizontalAlignment="Left" Height="203" Margin="206,299,0,0" VerticalAlignment="Top" Width="138"/>
 
     </Grid>
 </Page>

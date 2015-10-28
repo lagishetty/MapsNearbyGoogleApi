@@ -7,6 +7,7 @@ using Windows.ApplicationModel;
 using Windows.ApplicationModel.Activation;
 using Windows.Foundation;
 using Windows.Foundation.Collections;
+using Windows.Storage;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Controls.Primitives;
@@ -43,6 +44,8 @@ namespace mapdel
         /// search results, and so forth.
         /// </summary>
         /// <param name="e">Details about the launch request and process.</param>
+        /// 
+        ApplicationDataContainer data = Windows.Storage.ApplicationData.Current.LocalSettings;
         protected override void OnLaunched(LaunchActivatedEventArgs e)
         {
 #if DEBUG
@@ -70,7 +73,21 @@ namespace mapdel
                 }
 
                 // Place the frame in the current Window
+                
                 Window.Current.Content = rootFrame;
+
+                if (data.Values["ccheck"] == null && data.Values["mcheck"]==null)
+                {
+                    rootFrame.Navigate(typeof(Login));
+                }
+                else if (data.Values["ccheck"] == null && data.Values["mcheck"] != null)
+                {
+                    rootFrame.Navigate(typeof(MainPage));
+                }
+                else if(data.Values["ccheck"] != null && data.Values["mcheck"]==null)
+                {
+                    rootFrame.Navigate(typeof(Company));
+                }
             }
 
             if (rootFrame.Content == null)

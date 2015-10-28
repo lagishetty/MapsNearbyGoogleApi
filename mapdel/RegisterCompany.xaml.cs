@@ -48,14 +48,10 @@ namespace mapdel
             var con = new SQLiteAsyncConnection(dbpath);
             await con.CreateTableAsync<FuelReg>();
 
-
-
             map1.MapServiceToken = "AutVzTJ62c1kL9L5ni3TBhm5nr1wGSSxL04Zrsw6DTTUeoTT7VqS1Vup4vFmSYaL";
-
 
             Geolocator gl = new Geolocator();
             Geoposition gp = await gl.GetGeopositionAsync();
-
             BasicGeoposition queryHint = new BasicGeoposition();
 
             queryHint.Latitude = gp.Coordinate.Latitude;
@@ -65,7 +61,6 @@ namespace mapdel
             map1.MapElements.Add(mi);
             map1.Center = hwPoint1;
             map1.ZoomLevel = 16;
-
 
             Uri geocodeRequest = new Uri(string.Format("https://maps.googleapis.com/maps/api/place/nearbysearch/json?location={0},{1}&radius=1500&type=gas_station&key=AIzaSyBgBxFhipo5V0H2TL3fB9vc6KyvclffFXI", hwPoint1.Position.Latitude, hwPoint1.Position.Longitude)); // 17.4271,078.4466     AIzaSyCguNRWmAkk_Vctf0bePWiY1rIjM399Loo
 
@@ -81,9 +76,7 @@ namespace mapdel
                 {
                     var items = dataob.geometry;
                     var loct = items.location;
-
                     var sst = dataob.name;
-
                     var bzp = dataob.vicinity;
 
                     BasicGeoposition bgp = new BasicGeoposition();
@@ -121,28 +114,11 @@ namespace mapdel
                     map1.Children.Add(rd);
                     map1.Children.Add(bmi);
 
-
-                    
-                    rd.Click += (s, args) => rd_Click(s, args, hwPoint, sst, bzp);
-
-
                 }
             }
         }
 
-        async void rd_Click(object sender, RoutedEventArgs e, Geopoint g, string bunkname, string address)
-        {
-            var dbpath = ApplicationData.Current.LocalFolder.Path + "/mydb.db";
-            var con = new SQLiteAsyncConnection(dbpath);
-            await con.CreateTableAsync<FuelReg>();
-
-            mygeo = g;
-
-            //await con.InsertAsync(fr);
-
-            //btn.Click += (sender, e) => btn_Click(sender, e, gp);
-
-        }
+      
 
        
 

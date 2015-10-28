@@ -35,27 +35,30 @@ namespace mapdel
         /// </summary>
         /// <param name="e">Event data that describes how this page was reached.
         /// This parameter is typically used to configure the page.</param>
+        /// 
+
+        Windows.Storage.ApplicationDataContainer data = Windows.Storage.ApplicationData.Current.LocalSettings;
         protected async override void OnNavigatedTo(NavigationEventArgs e)
         {
             var dbpath = ApplicationData.Current.LocalFolder.Path + "/mydb.db";
             var con = new SQLiteAsyncConnection(dbpath);
             await con.CreateTableAsync<UserReg>();
             await con.CreateTableAsync<Response>();
+            await con.CreateTableAsync<LoginCheck>();
         }
         private async void Button_Click(object sender, RoutedEventArgs e)
         {
             var dbpath = ApplicationData.Current.LocalFolder.Path + "/mydb.db";
             var con = new SQLiteAsyncConnection(dbpath);
-            await con.CreateTableAsync<UserReg>();
-            await con.CreateTableAsync<LoginCheck>();
+
             UserReg m = new UserReg();
             Response rs = new Response();
             LoginCheck lk = new LoginCheck();
+
             lk.LoginName = text_reg.Text;
             lk.Password = text_password.Password;
             lk.IsCompany = false;
             m.Name = text_regname.Text;
-
 
             string r = "";
             if (radio_male.IsChecked == true)
@@ -72,12 +75,8 @@ namespace mapdel
             m.State = ((ComboBoxItem)combo_box.SelectedItem).Content.ToString();
             await con.InsertAsync(lk);
             m.LoginId = lk.LoginId;
-           // m.UserResID = rs.UserResID;
 
             await con.InsertAsync(m);
-
-
-
 
             MessageDialog md = new MessageDialog("Success");
             await md.ShowAsync();
@@ -102,10 +101,12 @@ namespace mapdel
                     lk = mylist[0];
                     if (lk.IsCompany == true)
                     {
+                        data.Values["ccheck"] = lk.LoginId;
                         this.Frame.Navigate(typeof(Company), lk.LoginId);
                     }
                     else
                     {
+                        data.Values["mcheck"] = lk.LoginId;
                         this.Frame.Navigate(typeof(MainPage), lk.LoginId);
                     }
 

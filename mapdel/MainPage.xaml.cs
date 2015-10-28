@@ -11,6 +11,7 @@ using Windows.Foundation;
 using Windows.Foundation.Collections;
 using Windows.Storage;
 using Windows.UI;
+using Windows.UI.Popups;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Controls.Maps;
@@ -46,6 +47,9 @@ namespace mapdel
 
         public dynamic ite;
         public dynamic myuserid;
+        public dynamic myusename;
+
+        Windows.Storage.ApplicationDataContainer data = Windows.Storage.ApplicationData.Current.LocalSettings;
         protected async override void OnNavigatedTo(NavigationEventArgs e)
         {
 
@@ -54,45 +58,35 @@ namespace mapdel
             await con.CreateTableAsync<Response>();
             await con.CreateTableAsync<Request>();
             await con.CreateTableAsync<FuelReg>();
-            srt = e.Parameter as object;
             
-            string querys = string.Format("select * from UserReg where LoginID='{0}'", srt);
-            List<UserReg> mylists = await con.QueryAsync<UserReg>(querys);
-
-            if (mylists.Count == 1)
+            srt = e.Parameter as object;
+          
+            if (srt == null)
             {
-                var sp = mylists[0];
-                myuserid = sp.UserID;
-                string querys1 = string.Format("select * from Response where UserResponseID={0}", sp.UserID); //where CId={0}", stp.FuelId);
-                List<Response> mylist1 = await con.QueryAsync<Response>(querys1);
-                if (mylist1.Count == 1)
-                {
-                    var pit = mylist1[0];
+                var msd = new MessageDialog("No user").ShowAsync();
+            }
+            else
+            {
+                tb1.Text = " ";
+                string querys = string.Format("select * from UserReg where LoginID='{0}'", srt);
+                List<UserReg> mylists = await con.QueryAsync<UserReg>(querys);
 
-                    tb1.Text = pit.res;
+                if (mylists.Count == 1)
+                {
+                    var sp = mylists[0];
+                    myuserid = sp.UserID;
+                    myusename = sp.Name;
+                    string querys1 = string.Format("select * from Response where UserResponseID={0}", sp.UserID); //where CId={0}", stp.FuelId);
+                    List<Response> mylist1 = await con.QueryAsync<Response>(querys1);
+                    if (mylist1.Count == 1)
+                    {
+                        var pit = mylist1[0];
+
+                        tb1.Text = pit.res;
+                    }
                 }
             }
-
-
-            //string query = string.Format("select * from FuelReg where FuelID='{0}'",srt);
-            //List<FuelReg> mylist = await con.QueryAsync<FuelReg>(query);
-            //if(mylist.Count==1)
-            //{
-            //    var stp = mylist[0];
-            //    string querys1 = string.Format("select * from Response where UserResponseID={0}",stp); //where CId={0}", stp.FuelId);
-            //    List<Response> mylist1 = await con.QueryAsync<Response>(querys1);
-            //    if(mylist1.Count==1)
-            //    {
-            //        var pit = mylist1[0];
-
-            //        tb1.Text = pit.res;
-            //    }
-                
-             // ite = stp.LoginId;
-           // }
             
-
-
             // TODO: Prepare page for display here.
 
             // TODO: If your application contains multiple pages, ensure that you are
@@ -197,50 +191,16 @@ namespace mapdel
             str.Add(address);
             str.Add(ite);
             str.Add(myuserid);
+            str.Add(myusename);
             
             this.Frame.Navigate(typeof(Bottles),str);
-
-
-
-            //StackPanel st = new StackPanel();
-            //st.Background = new SolidColorBrush(Colors.BlueViolet);
-            //st.MaxHeight = 100;
-            //st.MaxWidth = 40;
-            //RadioButton rb = new RadioButton();
-           
-        
-            //RadioButton rb1 = new RadioButton();
-
-            //st.Children.Add(rb);
-            //st.Children.Add(rb1);
-            
-
-            //MapControl.SetLocation(st, g);
-            //map1.Children.Add(st);
-
-            //int va;
-            //if(rb.IsChecked==true)
-            //{
-            //    va = 3;
-            //}
-            //else
-            //{
-            //    va = 4;
-            //}
-            //Request rq = new Request();
-
-            //rq.CompanyId = ite;
-            //rq.value = va;
-            //rq.uname = bunkname;
-            //con.InsertAsync(rq);
-
-
 
             
         }
 
         private void AppBarButton_Click(object sender, RoutedEventArgs e)
         {
+            data.Values["mcheck"] = null;
             this.Frame.Navigate(typeof(Login));
         }
 
