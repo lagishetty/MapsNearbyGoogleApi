@@ -99,6 +99,10 @@ namespace mapdel
                 await con.InsertAsync(rq);
                 var msd = new MessageDialog("Requested fuel :" + va).ShowAsync();
             }
+            else
+            {
+                var msd = new MessageDialog("No Company").ShowAsync();
+            }
 
         }
         Windows.Storage.ApplicationDataContainer data = Windows.Storage.ApplicationData.Current.LocalSettings;

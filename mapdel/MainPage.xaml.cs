@@ -60,10 +60,14 @@ namespace mapdel
             await con.CreateTableAsync<FuelReg>();
             
             srt = e.Parameter as object;
-          
+
+            if (data.Values["mcheck"] != null)
+            {
+                srt = data.Values["mcheck"];
+            }
             if (srt == null)
             {
-                var msd = new MessageDialog("No user").ShowAsync();
+               // var msd = new MessageDialog("No user").ShowAsync();
             }
             else
             {
@@ -200,7 +204,7 @@ namespace mapdel
 
         private void AppBarButton_Click(object sender, RoutedEventArgs e)
         {
-            data.Values["mcheck"] = null;
+            data.Values["mcheck"] = srt;
             this.Frame.Navigate(typeof(Login));
         }
 

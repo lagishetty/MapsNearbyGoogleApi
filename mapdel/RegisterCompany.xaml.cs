@@ -102,6 +102,8 @@ namespace mapdel
                     bgp.Longitude = loct.lng;
                     Geopoint hwPoint = new Geopoint(bgp);
 
+                    
+
                     MapControl.SetLocation(tbx, hwPoint);
                     MapControl.SetLocation(rd, hwPoint);
                     MapControl.SetLocation(bmi, hwPoint);
@@ -114,11 +116,23 @@ namespace mapdel
                     map1.Children.Add(rd);
                     map1.Children.Add(bmi);
 
+                    rd.Click += (s, args) => rd_Click(s, args, hwPoint, sst, bzp);
+
                 }
             }
         }
 
-      
+        async void rd_Click(object sender, RoutedEventArgs e, Geopoint g, string bunkname, string address)
+        {
+            var dbpath = ApplicationData.Current.LocalFolder.Path + "/mydb.db";
+            var con = new SQLiteAsyncConnection(dbpath);
+            await con.CreateTableAsync<FuelReg>();
+
+            mygeo = g;
+
+           
+
+        }
 
        
 

@@ -47,11 +47,16 @@ namespace mapdel
             await con.CreateTableAsync<Request>();
 
             var srt = e.Parameter as object;
-            
+
+
+            if (data.Values["ccheck"] != null)
+            {
+                srt = data.Values["ccheck"];
+            }
 
             if (srt == null)
             {
-                var msd = new MessageDialog("No user").ShowAsync();
+                //var msd = new MessageDialog("No user").ShowAsync();
             }
             else
             {
@@ -123,7 +128,7 @@ namespace mapdel
         
         private void AppBarButton_Click(object sender, RoutedEventArgs e)
         {
-            data.Values["ccheck"] = null;
+            data.Values["ccheck"] = srt;
             this.Frame.Navigate(typeof(Login));
         }
     }
